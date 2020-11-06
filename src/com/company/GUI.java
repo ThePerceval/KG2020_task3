@@ -10,7 +10,7 @@ import java.io.FileWriter;
 
 public class GUI extends JFrame {
     private JPanel panel1;
-    private JPanel panelForDraw;
+    private DrawPanel panelForDraw;
     private JComboBox comboBoxFunction;
     private JTextField textFieldFps;
     private JButton buttonExecute;
@@ -61,7 +61,7 @@ public class GUI extends JFrame {
     private JPanel panelArgumentC;
 
     public GUI() throws HeadlessException {
-        panelForDraw = new DrawPanel();
+        //panelForDraw = new DrawPanel();
 
         setContentPane(panel1);
         splitPanel.setBorder(null);
@@ -73,6 +73,7 @@ public class GUI extends JFrame {
                 if(comboBoxFunction.getSelectedIndex() == 0){
                     panelArgumentW.setVisible(false);
                     setJComponentSize(panelInterface, 250, 730);
+                    //`````````panelForDraw.setFunction();
                 }
                 else if(comboBoxFunction.getSelectedIndex() == 1){
                     panelArgumentW.setVisible(true);

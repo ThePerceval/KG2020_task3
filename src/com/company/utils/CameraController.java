@@ -1,6 +1,9 @@
 package com.company.utils;
 
+import com.company.RealPoint;
+import com.company.primitive.Line;
 import com.company.screen.ScreenConverter;
+import com.company.screen.ScreenPoint;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -31,6 +34,12 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
 
     private ScreenConverter sc;
 
+    private ScreenPoint prevPosition = null;
+
+    private Line currentNewLine = null;
+
+
+
     public CameraController(ScreenConverter sc) {
         this.sc = sc;
     }
@@ -42,12 +51,29 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(e.getButton() == MouseEvent.BUTTON3){
+            prevPosition = new ScreenPoint(e.getX(), e.getY());
+        }
+        else if(e.getButton() == MouseEvent.BUTTON1){
+            ScreenPoint current = new ScreenPoint(e.getX(), e.getY());
+            currentNewLine = new Line(sc.converterScreen2Real(current), sc.converterScreen2Real(current));
 
+        }
+        onRepaint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        /*if(e.getButton() == MouseEvent.BUTTON3){
+            prevPosition = null;
+        }
+        else if(e.getButton() == MouseEvent.BUTTON1){
+            if(currentNewLine != null)
+                allLines.add(currentNewLine);
+            currentNewLine = null;
 
+        }
+        prevPosition = null;*/
     }
 
     @Override
@@ -62,7 +88,21 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        ScreenPoint currentPosition = new ScreenPoint(e.getX(), e.getY());
+        if(prevPosition != null){
+            ScreenPoint delta = new ScreenPoint(
+                    -currentPosition.getX() + prevPosition.getX(),
+                    -currentPosition.getY() + prevPosition.getY());
+            RealPoint deltaReal = sc.converterScreen2Real(delta);
 
+            sc.setxReal(deltaReal.getX());
+            sc.setyReal(deltaReal.getY());
+            prevPosition = currentPosition;
+        }
+        if(currentNewLine != null){
+            currentNewLine.setPoint2(sc.converterScreen2Real(currentPosition));
+        }
+        onRepaint();
     }
 
     @Override

@@ -4,10 +4,10 @@ import com.company.interfaceUtils.PixelDrawer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class bufferedImagePixelDrawer implements PixelDrawer {
+public class BufferedImagePixelDrawer implements PixelDrawer {
     private BufferedImage bi;
 
-    public bufferedImagePixelDrawer(BufferedImage bi) {
+    public BufferedImagePixelDrawer(BufferedImage bi) {
         this.bi = bi;
     }
 
