@@ -26,7 +26,6 @@ public class DDALineDrawer implements LineDrawer {
             tmp = y1; y1 = y2; y2 = tmp;
         }
 
-
         double dx = x2 - x1, dy = Math.abs(y2 - y1);
         double k = dy / dx, y = y1;
         for (int x = x1; x < x2; x++) {

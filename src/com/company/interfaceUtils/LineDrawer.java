@@ -1,6 +1,5 @@
 package com.company.interfaceUtils;
 
-
 import com.company.screen.ScreenPoint;
 
 public interface LineDrawer {

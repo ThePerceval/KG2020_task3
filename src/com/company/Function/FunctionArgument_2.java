@@ -1,16 +1,19 @@
 package com.company.Function;
 
-import com.company.Function.IFunction;
-import com.company.Function.ITimeDependentParam;
+import java.util.List;
 
-public class FunctionArgument_2 implements IFunction, ITimeDependentParam {
-    @Override
-    public double compute(double x) {
-        return 0;
+public class FunctionArgument_2 implements ITimeDependentParam {
+    private List<Double> functionArguments;
+
+    public FunctionArgument_2(List<Double> functionArguments) {
+        this.functionArguments = functionArguments;
     }
 
     @Override
     public double getParamValue(double t) {
-        return 0;
+        double  a = functionArguments.get(0),
+                b = functionArguments.get(1),
+                c = functionArguments.get(2);
+        return a * 1 / (1 + Math.pow(Math.E, -b * t)) + c;
     }
 }

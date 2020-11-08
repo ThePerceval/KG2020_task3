@@ -1,68 +1,62 @@
 package com.company;
 
-import com.company.drawUtils.DrawPanel;
+import com.company.Function.Function_1;
+import com.company.Function.*;
+import com.company.Function.ITimeDependentParam;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GUI extends JFrame {
     private JPanel panel1;
+    private JSplitPane splitPanel;
     private DrawPanel panelForDraw;
-    private JComboBox comboBoxFunction;
-    private JTextField textFieldFps;
+    private JPanel panelInterface;
+    private JPanel panelArgumentA;
+    private JPanel panelArgumentB;
+    private JPanel panelArgumentC;
+    private JPanel panelArgumentW;
     private JButton buttonExecute;
+
+    private JComboBox comboBoxFunction;
     private JComboBox comboBoxArgA;
     private JComboBox comboBoxArgB;
     private JComboBox comboBoxArgC;
     private JComboBox comboBoxArgW;
-    private JSplitPane splitPanel;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JTextField textField8;
-    private JTextField textField9;
-    private JTextField textField10;
-    private JTextField textField11;
-    private JLabel LabelArgA_a;
-    private JLabel LabelArgA_b;
-    private JLabel LabelArgA_d;
-    private JLabel LabelArgB_a;
-    private JLabel LabelArgB_c;
-    private JLabel LabelArgB_d;
-    private JLabel LabelArgC_a;
-    private JLabel LabelArgC_b;
-    private JLabel LabelArgC_d;
-    private JLabel LabelArgW_a;
-    private JLabel LabelArgW_b;
-    private JLabel LabelArgW_d;
-    private JTextField textField12;
-    private JTextField textField13;
-    private JTextField textField14;
-    private JTextField textField15;
-    private JPanel panelArgumentW;
-    private JPanel panelInterface;
-    private JLabel LabelArgA_c;
-    private JLabel LabelArgB_b;
-    private JLabel LabelArgC_c;
-    private JLabel LabelArgW_c;
-    private JPanel panelArgW4;
-    private JPanel panelArg4C;
-    private JPanel panelArg4B;
-    private JPanel panelArg4A;
-    private JPanel panelArgumentA;
-    private JPanel panelArgumentB;
-    private JPanel panelArgumentC;
+
+    private JTextField textFieldFps;
+
+    private JTextField textFieldArgA1;
+    private JTextField textFieldArgA2;
+    private JTextField textFieldArgA3;
+    private JTextField textFieldArgA4;
+
+    private JTextField textFieldArgB1;
+    private JTextField textFieldArgB2;
+    private JTextField textFieldArgB3;
+    private JTextField textFieldArgB4;
+
+    private JTextField textFieldArgC1;
+    private JTextField textFieldArgC2;
+    private JTextField textFieldArgC3;
+    private JTextField textFieldArgC4;
+
+    private JTextField textFieldArgW1;
+    private JTextField textFieldArgW2;
+    private JTextField textFieldArgW3;
+    private JTextField textFieldArgW4;
+    private JButton ButtonCenterAxis;
+    private JButton ButtonExamples;
+    private JButton ButtonStart;
+
+    private Timer timer;
 
     public GUI() throws HeadlessException {
-        //panelForDraw = new DrawPanel();
-
         setContentPane(panel1);
         splitPanel.setBorder(null);
 
@@ -73,66 +67,94 @@ public class GUI extends JFrame {
                 if(comboBoxFunction.getSelectedIndex() == 0){
                     panelArgumentW.setVisible(false);
                     setJComponentSize(panelInterface, 250, 730);
-                    //`````````panelForDraw.setFunction();
                 }
                 else if(comboBoxFunction.getSelectedIndex() == 1){
                     panelArgumentW.setVisible(true);
-                    setJComponentSize(panelInterface, 250, 900);
+                    setJComponentSize(panelInterface, 250, 1000);
                 }
             }
         });
-        comboBoxArgA.addActionListener(new ActionListener() {
+
+
+        buttonExecute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(comboBoxArgA.getSelectedIndex() == 1){
-                    panelArg4A.setVisible(false);
-                    setJComponentSize(panelArgumentA, 250, 150);
+                List<ITimeDependentParam> listParam = new ArrayList<ITimeDependentParam>();
+                ITimeDependentParam A = comboBoxArgA.getSelectedIndex() == 0 ?
+                                new FunctionArgument_1(getArray(textFieldArgA1, textFieldArgA2, textFieldArgA3, textFieldArgA4)) :
+                                new FunctionArgument_2(getArray(textFieldArgA1, textFieldArgA2, textFieldArgA3)),
+                        B = comboBoxArgB.getSelectedIndex() == 0 ?
+                                new FunctionArgument_1(getArray(textFieldArgB1, textFieldArgB2, textFieldArgB3, textFieldArgB4)) :
+                                new FunctionArgument_2(getArray(textFieldArgB1, textFieldArgB2, textFieldArgB3)),
+                        C = comboBoxArgC.getSelectedIndex() == 0 ?
+                                new FunctionArgument_1(getArray(textFieldArgC1, textFieldArgC2, textFieldArgC3, textFieldArgC4)) :
+                                new FunctionArgument_2(getArray(textFieldArgC1, textFieldArgC2, textFieldArgC3));
+                listParam.add(A);
+                listParam.add(B);
+                listParam.add(C);
+                if(comboBoxFunction.getSelectedIndex() == 0){
+                    panelForDraw.setFunction(new Function_1(listParam));
                 }
-                else if(comboBoxArgA.getSelectedIndex() == 0){
-                    panelArg4A.setVisible(true);
-                    setJComponentSize(panelArgumentA, 250, 180);
+                else{
+                    ITimeDependentParam W = comboBoxArgW.getSelectedIndex() == 0 ?
+                        new FunctionArgument_1(getArray(textFieldArgW1, textFieldArgW2, textFieldArgW3, textFieldArgW4)) :
+                        new FunctionArgument_2(getArray(textFieldArgW1, textFieldArgW2, textFieldArgW3));
+                    listParam.add(W);
+                    panelForDraw.setFunction(new Function_2(listParam));
                 }
+                panelForDraw.setTime(0);
             }
         });
-        comboBoxArgB.addActionListener(new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(comboBoxArgB.getSelectedIndex() == 1){
-                    panelArg4B.setVisible(false);
-                    setJComponentSize(panelArgumentB, 250, 150);
-                }
-                else if(comboBoxArgB.getSelectedIndex() == 0){
-                    panelArg4B.setVisible(true);
-                    setJComponentSize(panelArgumentB, 250, 180);
-                }
+                panelForDraw.drawTimeFunction(Double.parseDouble(textFieldFps.getText()));
+
             }
         });
-        comboBoxArgC.addActionListener(new ActionListener() {
+
+        ButtonStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(comboBoxArgC.getSelectedIndex() == 1){
-                    panelArg4C.setVisible(false);
-                    setJComponentSize(panelArgumentC, 250, 150);
+                if(timer.isRunning()){
+                    timer.stop();
+                    ButtonStart.setText("Запустить");
                 }
-                else if(comboBoxArgC.getSelectedIndex() == 0){
-                    panelArg4C.setVisible(true);
-                    setJComponentSize(panelArgumentC, 250, 180);
+                else{
+                    int delay;
+                    try{
+                        delay = Integer.parseInt(textFieldFps.getText());
+                    } catch(NumberFormatException ex){
+                        JOptionPane.showMessageDialog(null, "Не удалось прочитать значение периода", "Ошибка",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        ex.printStackTrace();
+                        return;
+                    }
+                    if (delay < 0) {
+                        JOptionPane.showMessageDialog(null, "Период не может быть отрицательным", "Ошибка",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                    ButtonStart.setText("Остановить");
+                    timer.setDelay(delay);
+                    timer.setInitialDelay(delay);
+                    timer.start();
                 }
+
             }
         });
-        comboBoxArgW.addActionListener(new ActionListener() {
+
+        ButtonCenterAxis.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(comboBoxArgW.getSelectedIndex() == 1){
-                    panelArgW4.setVisible(false);
-                    setJComponentSize(panelArgumentW, 250, 150);
-                }
-                else if(comboBoxArgW.getSelectedIndex() == 0){
-                    panelArgW4.setVisible(true);
-                    setJComponentSize(panelArgumentB, 250, 200);
-                }
+                panelForDraw.setCenterCoordinates();
             }
         });
+
+        actionForComboBoxArg(comboBoxArgA);
+        actionForComboBoxArg(comboBoxArgB);
+        actionForComboBoxArg(comboBoxArgC);
+        actionForComboBoxArg(comboBoxArgW);
     }
 
     private void setJComponentSize(JComponent component, int width, int height){
@@ -143,5 +165,37 @@ public class GUI extends JFrame {
 
     private void createUIComponents() {
         panelForDraw = new DrawPanel();
+    }
+
+    private List<Double> getArray(JTextField tf1, JTextField tf2, JTextField tf3){
+        List<Double> list = new ArrayList<Double>();
+        list.add(Double.parseDouble(tf1.getText()));
+        list.add(Double.parseDouble(tf2.getText()));
+        list.add(Double.parseDouble(tf3.getText()));
+        return list;
+    }
+    private List<Double> getArray(JTextField tf1, JTextField tf2, JTextField tf3, JTextField tf4){
+        List<Double> list = new ArrayList<Double>();
+        list.add(Double.parseDouble(tf1.getText()));
+        list.add(Double.parseDouble(tf2.getText()));
+        list.add(Double.parseDouble(tf3.getText()));
+        list.add(Double.parseDouble(tf4.getText()));
+        return list;
+    }
+
+    private void actionForComboBoxArg(final JComboBox box){
+        box.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(box.getSelectedIndex() == 0){
+                    box.getParent().getComponent(4).setVisible(true);
+                    setJComponentSize((JComponent)box.getParent(), 250, 200);
+                }
+                else if(box.getSelectedIndex() == 1){
+                    box.getParent().getComponent(4).setVisible(false);
+                    setJComponentSize((JComponent)box.getParent(), 250, 150);
+                }
+            }
+        });
     }
 }

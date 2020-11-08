@@ -20,11 +20,24 @@ public class ScreenConverter {
         double y = (yReal - realPoint.getY()) * heightScreen / heightReal;
         return new ScreenPoint((int) x, (int) y);
     }
+    public double converterReal2ScreenX(double realX){
+        return (realX - xReal) * widthScreen / widthReal;
+    }
+    public double converterReal2ScreenY(double realY){
+        return (yReal - realY) * heightScreen / heightReal;
+    }
 
     public RealPoint converterScreen2Real(ScreenPoint screenPoint){
         double x = xReal + (screenPoint.getX() * widthReal / widthScreen);
         double y = yReal - (screenPoint.getY() * heightReal / heightScreen);
         return new RealPoint(x, y);
+    }
+
+    public double converterScreen2RealX(int screenX){
+        return xReal + (screenX * widthReal / widthScreen);
+    }
+    public double converterScreen2RealY(int screenY){
+        return yReal - (screenY * heightReal / heightScreen);
     }
 
     public double getxReal() {

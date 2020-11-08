@@ -5,7 +5,6 @@ import com.company.primitive.Line;
 import com.company.screen.ScreenConverter;
 import com.company.screen.ScreenPoint;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,28 +52,12 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
     public void mousePressed(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON3){
             prevPosition = new ScreenPoint(e.getX(), e.getY());
+            onRepaint();
         }
-        else if(e.getButton() == MouseEvent.BUTTON1){
-            ScreenPoint current = new ScreenPoint(e.getX(), e.getY());
-            currentNewLine = new Line(sc.converterScreen2Real(current), sc.converterScreen2Real(current));
-
-        }
-        onRepaint();
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        /*if(e.getButton() == MouseEvent.BUTTON3){
-            prevPosition = null;
-        }
-        else if(e.getButton() == MouseEvent.BUTTON1){
-            if(currentNewLine != null)
-                allLines.add(currentNewLine);
-            currentNewLine = null;
-
-        }
-        prevPosition = null;*/
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
     public void mouseEntered(MouseEvent e) {
@@ -118,6 +101,8 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
         for (int i = Math.abs(clicks); i > 0; i--) {
             scale = scale * step;
         }
+        sc.setxReal(sc.getxReal() * scale);
+        sc.setyReal(sc.getyReal() * scale);
         sc.setWidthReal(sc.getWidthReal() * scale);
         sc.setHeightReal(sc.getHeightReal() * scale);
         onRepaint();
